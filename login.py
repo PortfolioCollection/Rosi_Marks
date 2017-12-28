@@ -96,8 +96,12 @@ while True:
                             body += "Before: " + saved[i] + "\n" + "Now: " + ', '.join(course) + "\n"
                             i+=1
 
-        print("******************************************************************************************")                            
-                        
+        print("******************************************************************************************")
+       
+        # save the file
+        if update == False:
+            f.close()                      
+   
     # Send an email if mark changed 
     if body != "":
         message = """From: %s\nTo: %s\nSubject: %s\n\n%s
