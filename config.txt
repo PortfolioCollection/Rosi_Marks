@@ -1,0 +1,13 @@
+Do nut include spaces before and after '='
+
+====FOR ROSI====
+student_number=
+pin=
+
+====YOUR GMAIL====
+(You must turn on allow access for less secured apps)
+your_gmail_address=@gmail.com
+your_gmail_password=
+
+===To NOTIFICATION EMAIL====
+to_email_address=
