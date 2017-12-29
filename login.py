@@ -5,6 +5,7 @@ import smtplib
 import os.path
 import time
 import urllib3
+import datetime
 
 # read config file
 student_number, pin, gmail_address, gmail_password, to_address = "","","","",""
@@ -22,8 +23,11 @@ for line in login:
         gmail_password = line[line.find("=") + 1:]
     if line.startswith('to_email_address'):
         to_address = line[line.find("=") + 1:]
+
 # Part of the email
 body = ""
+
+TIMEOUT = 1800
 
 # if update is false, download data and write to file
 # if update is true, read file and compare
@@ -31,7 +35,9 @@ update = False
 if os.path.exists("saved"):
     update = True
 
-while True:    
+while True:  
+    print("..................................................................................................")  
+    print ("Logging in ROSI")
     # log onto the server and ignore warnings
     urllib3.disable_warnings()
     with requests.Session() as c:  
@@ -57,7 +63,7 @@ while True:
         # soup
         soup = BeautifulSoup(html, "lxml")
         
-        print("..................................................................................................")
+        print ("Logged in at: " + str(datetime.datetime.now()))
         if update == False:
             # make a file to save the grades
             f = open('saved', 'w')
@@ -68,13 +74,13 @@ while True:
             i = 0
             print ("Comparing to the previous transcript......")
         
-        print("*************************************** Current Transcript ***************************************")
+        ## print("*************************************** Current Transcript ***************************************")
         # Find every table containing marks    
         for table in soup.find_all("table", attrs={"class":"recentAcademicHistory"}):
             all_courses = []
             
-            # The academic year and degree 
-            print(re.sub('\s+', ' ', table.find("tr").find("th").get_text()))
+            ## Print the academic year and degree 
+            ## print(re.sub('\s+', ' ', table.find("tr").find("th").get_text()))
             
             # Rest of the table
             for tr in table.find_all("tr"):
@@ -91,7 +97,7 @@ while True:
                     
                 # only keep the lines with courses 
                 if len(course) == 5:                
-                    print (course)
+                    # print (course)
                     if update == False:
                         f.write(', '.join(course) + "\n")
                     else:
@@ -102,7 +108,7 @@ while True:
                             body += "Before: " + saved[i] + "\n" + "Now: " + ', '.join(course) + "\n"
                             i+=1
 
-        print("******************************************************************************************")
+        ## print("******************************************************************************************")
        
         # save the file
         if update == False:
@@ -140,4 +146,5 @@ while True:
     # Program will update the save file immediately if transcript was changed  
     # else it will have a timer delay before it checks again (in seconds)
     if update == True:
-        time.sleep(1800)
+        print ("Recheck in " + str(TIMEOUT) + " seconds ...")
+        time.sleep(TIMEOUT)
