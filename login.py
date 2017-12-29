@@ -3,7 +3,8 @@ import requests
 import re
 import smtplib
 import os.path
-import time 
+import time
+import urllib3
 
 # read config file
 student_number, pin, gmail_address, gmail_password, to_address = "","","","",""
@@ -31,7 +32,8 @@ if os.path.exists("saved"):
     update = True
 
 while True:    
-    # log onto the server 
+    # log onto the server and ignore warnings
+    urllib3.disable_warnings()
     with requests.Session() as c:  
         url = 'https://sws.rosi.utoronto.ca/sws/auth/login/verify.do'
         c.get(url, verify=False) 
