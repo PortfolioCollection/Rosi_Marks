@@ -3,8 +3,7 @@ import requests
 import re
 import smtplib
 import os.path
-import time
-import urllib3
+import time 
 
 # read config file
 student_number, pin, gmail_address, gmail_password, to_address = "","","","",""
@@ -32,9 +31,7 @@ if os.path.exists("saved"):
     update = True
 
 while True:    
-    # log onto the server
-    
-    urllib3.disable_warnings()
+    # log onto the server 
     with requests.Session() as c:  
         url = 'https://sws.rosi.utoronto.ca/sws/auth/login/verify.do'
         c.get(url, verify=False) 
@@ -58,14 +55,18 @@ while True:
         # soup
         soup = BeautifulSoup(html, "lxml")
         
+        print("..................................................................................................")
         if update == False:
             # make a file to save the grades
             f = open('saved', 'w')
+            print ("Updating the existing transcript......")
         else:
+            # read the file for comparing
             saved = open("saved", "r").read().split("\n")
             i = 0
+            print ("Comparing to the previous transcript......")
         
-        print("*************************************** Transcript ***************************************")
+        print("*************************************** Current Transcript ***************************************")
         # Find every table containing marks    
         for table in soup.find_all("table", attrs={"class":"recentAcademicHistory"}):
             all_courses = []
@@ -103,10 +104,16 @@ while True:
        
         # save the file
         if update == False:
-            f.close()                      
+            f.close()
+            print("Existing transcript updated!")
+            update = True
    
     # Send an email if mark changed 
     if body != "":
+        print("======================================= Changes dectected =======================================")
+        print(body)
+        print("=================================================================================================")  
+        print("Attempting sending email to: " + to_address)
         message = """From: %s\nTo: %s\nSubject: %s\n\n%s
         """ % (gmail_address, to_address, "Marks updated!", body)
         
@@ -123,7 +130,12 @@ while True:
         # reset email body
         body = ""
         # update the file on the next iteartion 
-        update = False
-    
-    # pause for a bit before checking again (in seconds)   
-    time.sleep(1800) 
+        update = False        
+        print("=================================================================================================")        
+    else:
+        print("======================================= No changes found =======================================")
+
+    # Program will update the save file immediately if transcript was changed  
+    # else it will have a timer delay before it checks again (in seconds)
+    if update == True:
+        time.sleep(1800)
