@@ -1,4 +1,4 @@
-Do nut include spaces before and after '='
+Do not include spaces before and after '='
 
 ====FOR ROSI====
 student_number=
