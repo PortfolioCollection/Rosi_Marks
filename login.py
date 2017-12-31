@@ -27,7 +27,7 @@ for line in login:
 # Part of the email
 body = ""
 
-TIMEOUT = 1800
+TIMEOUT = 300
 
 # if update is false, download data and write to file
 # if update is true, read file and compare
@@ -68,19 +68,21 @@ while True:
             # make a file to save the grades
             f = open('saved', 'w')
             print ("Updating the existing transcript......")
+            print("*************************************** ROSI Transcript ***************************************")
         else:
+            print("previous saved transcript detected!")            
             # read the file for comparing
             saved = open("saved", "r").read().split("\n")
             i = 0
             print ("Comparing to the previous transcript......")
         
-        ## print("*************************************** Current Transcript ***************************************")
         # Find every table containing marks    
         for table in soup.find_all("table", attrs={"class":"recentAcademicHistory"}):
             all_courses = []
             
-            ## Print the academic year and degree 
-            ## print(re.sub('\s+', ' ', table.find("tr").find("th").get_text()))
+            # Print the academic year and degree 
+            if update == False:
+                print(re.sub('\s+', ' ', table.find("tr").find("th").get_text()))
             
             # Rest of the table
             for tr in table.find_all("tr"):
@@ -96,9 +98,9 @@ while True:
                     course.append(line)
                     
                 # only keep the lines with courses 
-                if len(course) == 5:                
-                    # print (course)
-                    if update == False:
+                if len(course) == 5:    
+                    if update == False:            
+                        print (course)
                         f.write(', '.join(course) + "\n")
                     else:
                         if ', '.join(course) == saved[i]:
@@ -108,12 +110,12 @@ while True:
                             body += "Before: " + saved[i] + "\n" + "Now: " + ', '.join(course) + "\n"
                             i+=1
 
-        ## print("******************************************************************************************")
        
         # save the file
         if update == False:
             f.close()
-            print("Existing transcript updated!")
+            print("******************************************************************************************")
+            print("ROSI transcript saved!")
             update = True
    
     # Send an email if mark changed 
@@ -141,10 +143,10 @@ while True:
         update = False        
         print("=================================================================================================")        
     else:
-        print("======================================= No changes found =======================================")
+        print(">>> No changes found")
 
     # Program will update the save file immediately if transcript was changed  
     # else it will have a timer delay before it checks again (in seconds)
     if update == True:
-        print ("Recheck in " + str(TIMEOUT) + " seconds ...")
+        print ("Recheck in " + str(TIMEOUT) + " seconds ... \n")
         time.sleep(TIMEOUT)
