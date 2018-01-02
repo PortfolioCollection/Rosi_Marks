@@ -4,7 +4,6 @@ import re
 import smtplib
 import os.path
 import time
-import urllib3
 import datetime
 
 def read_credentials():
@@ -50,7 +49,7 @@ def make_new_file(html):
 
 def parse_soup(html,file,check):    
     # soup
-    soup = BeautifulSoup(html, "lxml")
+    soup = BeautifulSoup(html, "html5lib")
     # Part of the email
     body = ""
     i = 0
@@ -137,7 +136,7 @@ def login():
         print("..................................................................................................")  
         print ("Logging in ROSI")
         # log onto the server and ignore warnings
-        urllib3.disable_warnings()
+        requests.packages.urllib3.disable_warnings()
         with requests.Session() as c:  
             url = 'https://sws.rosi.utoronto.ca/sws/auth/login/verify.do'
             c.get(url, verify=False) 
