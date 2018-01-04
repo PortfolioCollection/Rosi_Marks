@@ -34,6 +34,8 @@ def check_changes(html):
     body = parse_soup(html,saved,lambda body,saved,course,i:
                       "" if ', '.join(course) == saved[i]
                       else "Before: " + saved[i] + "\n" + "Now: " + ', '.join(course) + "\n")
+    if len(body) != 0:
+        make_new_file(html)
     return body
     
 def make_new_file(html):
