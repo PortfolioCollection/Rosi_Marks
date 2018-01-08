@@ -16,3 +16,13 @@ def read_credentials():
         if line.startswith('to_email_address'):
             to_address = line[line.find("=") + 1:]
     return (student_number, pin, gmail_address, gmail_password, to_address)
+
+def get_timeout():
+    
+    timeout = ""
+    login = open("config.txt", "r").read().split("\n")
+
+    for line in login:
+        if line.startswith('pause'):
+            timeout = line[line.find("=") + 1:]
+    return timeout    

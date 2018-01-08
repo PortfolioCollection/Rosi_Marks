@@ -5,9 +5,13 @@ student_number=
 pin=
 
 ====YOUR GMAIL====
-(You must turn on allow access for less secured apps)
+(You must turn on allow access for less secured apps from sender's gmail)
 your_gmail_address=@gmail.com
 your_gmail_password=
 
-===To NOTIFICATION EMAIL====
+====NOTIFICATION EMAIL ADDRESS====
 to_email_address=
+
+====TIMEOUT====
+(delay between each login (seconds))
+pause=300

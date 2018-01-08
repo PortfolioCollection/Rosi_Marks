@@ -8,7 +8,7 @@ import os.path
 def login():
     info = credentials.read_credentials()
     student_number, pin, gmail_address, gmail_password, to_address = info
-    TIMEOUT = 300
+    TIMEOUT = (int)(credentials.get_timeout())
     # if update is false, download data and write to file
     # if update is true, read file and compare
     update = False
